@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Base64;
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -34,6 +35,7 @@ public class DataController {
             String uploadDir = "data-photo/" + saveData.getId();
             FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
         } else {
+            data.setAuthor((String)token.getToken().getClaims().get("name"));
             dataService.createData(data);
         }
     }
@@ -48,6 +50,11 @@ public class DataController {
         return this.dataService.getById(id);
     }
 
+    @GetMapping("/listData")
+    public List<Data> listData() {
+        return this.dataService.listData();
+    }
+
     @PutMapping("/modifyData/{id}")
     public void modifyData(JwtAuthenticationToken token,@Valid @ModelAttribute("data") DataDto data, @RequestParam(value = "image", required = false) MultipartFile multipartFile, @PathVariable(value = "id") long id) throws IOException {
         if (multipartFile != null) {
@@ -58,6 +65,7 @@ public class DataController {
             String uploadDir = "data-photo/" + saveData.getId();
             FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
         } else {
+            data.setAuthor((String)token.getToken().getClaims().get("name"));
             dataService.modifyData(data, id);
         }
     }

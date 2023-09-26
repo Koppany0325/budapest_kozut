@@ -7,6 +7,8 @@ import com.example.budapest_kozut.repo.DataRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +31,11 @@ public class DataServiceImpl implements DataService {
     @Override
     public Data getById(Long id) {
         return dataRepo.findById(id).orElseThrow();
+    }
+
+    @Override
+    public List<Data> listData() {
+        return dataRepo.findAll();
     }
 
     @Override
